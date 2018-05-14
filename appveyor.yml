@@ -18,3 +18,5 @@ test_script:
       echo "Kernel version is lower than $MINIMAL_VERSION"
       return 1
     fi
+
+build: off
