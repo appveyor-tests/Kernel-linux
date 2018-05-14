@@ -1,0 +1,20 @@
+init:
+- appveyor version
+- sh: echo $APPVEYOR_BUILD_WORKER_IMAGE
+- sh: echo $APPVEYOR_BUILD_WORKER_CLOUD
+
+environment:
+  MINIMAL_VERSION: 4.13.0
+test_script:
+- sh: |
+    KERNEL_VERSION=$(uname -r)
+    echo "Kernel version is $KERNEL_VERSION"
+    SUFFIX=${KERNEL_VERSION#*-}
+    IFS=. read -r Ma Mi fix <<< "${KERNEL_VERSION%%-*}"
+    IFS=. read -r MIN_MA MIN_MI MIN_FIX <<< "${MINIMAL_VERSION%%-*}"
+    if [ $Ma -ge $MIN_MA ] && [ $Mi -ge $MIN_MI ]; then
+      echo "Kernel version is greater or equal to $MINIMAL_VERSION"
+    else
+      echo "Kernel version is lower than $MINIMAL_VERSION"
+      return 1
+    fi
