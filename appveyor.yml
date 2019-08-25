@@ -12,7 +12,9 @@ test_script:
     SUFFIX=${KERNEL_VERSION#*-}
     IFS=. read -r Ma Mi fix <<< "${KERNEL_VERSION%%-*}"
     IFS=. read -r MIN_MA MIN_MI MIN_FIX <<< "${MINIMAL_VERSION%%-*}"
-    if [ $Ma -ge $MIN_MA ] && [ $Mi -ge $MIN_MI ]; then
+    if [ $Ma -gt $MIN_MA ]; then
+      echo "Kernel version is greater or equal to $MINIMAL_VERSION"
+    elif [ $Ma -eq $MIN_MA ] && [ $Mi -ge $MIN_MI ]; then
       echo "Kernel version is greater or equal to $MINIMAL_VERSION"
     else
       echo "Kernel version is lower than $MINIMAL_VERSION"
